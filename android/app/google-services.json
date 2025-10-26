@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "580076762827",
+    "project_id": "group-leaderboard-a8d51",
+    "storage_bucket": "group-leaderboard-a8d51.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:580076762827:android:258877b2f5e479b1dbcd4e",
+        "android_client_info": {
+          "package_name": "com.example.group_leaderboard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyACwkrfCJjAzxOx_ZJ4PaDDLWIid-9JFxo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

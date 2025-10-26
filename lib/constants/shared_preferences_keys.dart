@@ -1,0 +1,12 @@
+const String userKey = 'user-data';
+const String currentThemeKey = 'current_theme';
+const String darkModeKey = 'dark_mode';
+const String languageCodeKey = 'language_code';
+const String countryCodeKey = 'country_code';
+const String jwtKey = 'jwt';
+const String baseUrlKey = 'base_url';
+const String refreshTokenKey = 'refreshToken';
+const String navigationStackKey = 'stack';
+const String isFirstTimeKey = 'first_time';
+const String governorateKey = 'governorate';
+const String searchModeKey = 'search_mode';
