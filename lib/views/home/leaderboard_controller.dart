@@ -1,4 +1,4 @@
-import 'package:web/web.dart' as web;
+// import 'package:web/web.dart' as web;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:group_leaderboard/helpers/helper.dart';
@@ -19,14 +19,14 @@ class LeaderboardController extends GetxController {
     _selectedGroup = value == 'All' ? null : value;
     if (_selectedGroup != null) {
       Get.parameters['groupID'] = _selectedGroup;
-      web.window.history.pushState(
-        null,
-        'Leaderboard $_selectedGroup',
-        "/leaderboard/$_selectedGroup",
-      );
+      // web.window.history.pushState(
+      //   null,
+      //   'Leaderboard $_selectedGroup',
+      //   "/leaderboard/$_selectedGroup",
+      // );
     } else {
       Get.parameters['groupID'] = '';
-      web.window.history.pushState(null, 'Groups Overview', "/leaderboard");
+      // web.window.history.pushState(null, 'Groups Overview', "/leaderboard");
     }
     update();
     getFirestoreQuery();
@@ -53,9 +53,12 @@ class LeaderboardController extends GetxController {
       final result = await baseQuery.get();
       docs = result.docs;
       if (selectedGroup != null) {
-        groupSum = docs
-            .map((e) => e['totalScore'] ?? 0)
-            .reduce((value, element) => value + element);
+        groupSum = double.tryParse(
+          docs
+              .map((e) => e['totalScore'] ?? 0)
+              .reduce((value, element) => value + element)
+              .toString(),
+        );
         totalStudents = docs.length;
       } else {
         groupSum = null;

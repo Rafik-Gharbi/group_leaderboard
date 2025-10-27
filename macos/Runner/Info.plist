@@ -28,5 +28,34 @@
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.580076762827-c261kje6lpjp3lprip100cbdb398qhj6</string>
+				<!-- <string>com.googleusercontent.apps.580076762827-3kd838tdoc3gqqa7bpdju4oo090mjfl5</string> -->
+			</array>
+		</dict>
+	</array>
+	<!-- Allow AppAuth to fetch HTTPS documents from Google -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+		<key>NSExceptionDomains</key>
+		<dict>
+			<key>google.com</key>
+			<dict>
+				<key>NSIncludesSubdomains</key>
+				<true/>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
+		</dict>
+	</dict>
+
 </dict>
 </plist>

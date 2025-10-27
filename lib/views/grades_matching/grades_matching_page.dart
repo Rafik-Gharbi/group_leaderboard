@@ -119,7 +119,9 @@ class GradesMatchingPage extends StatelessWidget {
                                   onTap: () => controller.openProfile(student),
                                   leading: CircleAvatar(
                                     child: Text(
-                                      (student['name'] ?? 'U')[0].toUpperCase(),
+                                      Helper.getInitials(
+                                        student['name'] ?? 'U',
+                                      ),
                                     ),
                                   ),
                                   title: Text(
@@ -139,7 +141,6 @@ class GradesMatchingPage extends StatelessWidget {
                                           'Linked to: ${student['linkedGradesId']}',
                                         ),
                                   trailing: PopupMenuButton<String>(
-                                    color: Colors.grey.shade200,
                                     constraints: BoxConstraints(maxHeight: 400),
                                     borderRadius: BorderRadius.circular(6),
                                     iconSize: 32,
@@ -149,48 +150,87 @@ class GradesMatchingPage extends StatelessWidget {
                                         selectedGrade,
                                       );
                                     },
-                                    itemBuilder: (_) => controller.grades.map((
-                                      g,
-                                    ) {
-                                      final isSuggested =
+                                    itemBuilder: (_) => controller.grades
+                                        .where(
+                                          (g) =>
+                                              !Helper.isNullOrEmpty(
+                                                student['group'],
+                                              ) &&
+                                              student['group'] == g['group'],
+                                        )
+                                        .map((g) {
+                                          final isSuggested =
+                                              Helper.isNullOrEmpty(
+                                                student['linkedGradesId'],
+                                              )
+                                              ? suggested.any(
+                                                  (e) =>
+                                                      e['target'] ==
+                                                      g['studentName'],
+                                                )
+                                              : g['id'] ==
+                                                    student['linkedGradesId'];
+                                          final rating =
+                                              Helper.isNullOrEmpty(
+                                                student['linkedGradesId'],
+                                              )
+                                              ? suggested.any(
+                                                      (e) =>
+                                                          e['target'] ==
+                                                          g['studentName'],
+                                                    )
+                                                    ? suggested.singleWhere(
+                                                        (e) =>
+                                                            e['target'] ==
+                                                            g['studentName'],
+                                                      )['rating']
+                                                    : null
+                                              : null;
+                                          return PopupMenuItem(
+                                            value: g['id'].toString(),
+                                            padding: EdgeInsets.zero,
+                                            child: DecoratedBox(
+                                              decoration: BoxDecoration(
+                                                color: isSuggested
+                                                    ? kPrimaryColor.withAlpha(
+                                                        rating != null
+                                                            ? (rating * 255)
+                                                                  .toInt()
+                                                            : 255,
+                                                      )
+                                                    : null,
+                                              ),
+                                              child: Padding(
+                                                padding: const EdgeInsets.all(
+                                                  16,
+                                                ),
+                                                child: Align(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  child: Text(
+                                                    '${g['group']} - ${g['studentName']}',
+                                                    style: AppFonts.x14Regular
+                                                        .copyWith(
+                                                          color: isSuggested
+                                                              ? Colors.white
+                                                              : null,
+                                                        ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        })
+                                        .toList(),
+                                    child: Icon(
+                                      Icons.link,
+                                      color:
                                           Helper.isNullOrEmpty(
                                             student['linkedGradesId'],
                                           )
-                                          ? suggested.any(
-                                              (e) =>
-                                                  e['target'] ==
-                                                  g['studentName'],
-                                            )
-                                          : g['id'] ==
-                                                student['linkedGradesId'];
-                                      return PopupMenuItem(
-                                        value: g['id'].toString(),
-                                        padding: EdgeInsets.zero,
-                                        child: DecoratedBox(
-                                          decoration: BoxDecoration(
-                                            color: isSuggested
-                                                ? kPrimaryColor
-                                                : null,
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(16),
-                                            child: Align(
-                                              alignment: Alignment.centerLeft,
-                                              child: Text(
-                                                '${g['group']} - ${g['studentName']}',
-                                                style: AppFonts.x14Regular
-                                                    .copyWith(
-                                                      color: isSuggested
-                                                          ? Colors.white
-                                                          : null,
-                                                    ),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      );
-                                    }).toList(),
-                                    child: const Icon(Icons.link),
+                                          ? Colors.black
+                                          : Colors.grey,
+                                    ),
                                   ),
                                 );
                               },

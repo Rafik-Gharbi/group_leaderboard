@@ -115,7 +115,7 @@ class OverviewPage extends StatelessWidget {
                                 child:
                                     Helper.isNullOrEmpty(student['pictureUrl'])
                                     ? Text(
-                                        controller.getInitials(
+                                        Helper.getInitials(
                                           student['studentName'],
                                         ),
                                         style: AppFonts.x18Regular.copyWith(

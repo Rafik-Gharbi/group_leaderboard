@@ -66,7 +66,7 @@ class SideBar extends StatelessWidget {
                 ),
 
                 // Grades Matching (Admin)
-                if (MainController.find.isAdmin)
+                if (MainController.find.currentUser!.isAdmin)
                   _DrawerItem(
                     icon: Icons.score_outlined,
                     label: 'Grades Matching',
