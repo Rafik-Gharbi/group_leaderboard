@@ -1,3 +1,5 @@
+import 'package:group_leaderboard/helpers/helper.dart';
+
 import '../constants/constants.dart';
 
 class User {
@@ -29,7 +31,10 @@ class User {
   );
 
   bool get isNotCompleted =>
-      name == null || email == null || photo == null || group == null;
+      Helper.isNullOrEmpty(name) ||
+      Helper.isNullOrEmpty(email) ||
+      Helper.isNullOrEmpty(photo) ||
+      Helper.isNullOrEmpty(group);
 
   bool get isAdmin => email == adminEmail;
 }

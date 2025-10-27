@@ -123,5 +123,12 @@ class MainController extends GetxController {
     Get.offAllNamed(LoginPage.routeName);
   }
 
-  Future<void> checkUserApproval() async => await fetchProfile();
+  Future<void> checkUserApproval() async {
+    await fetchProfile();
+    if (currentUser?.isNotCompleted ?? true) {
+      Get.offAllNamed(LoginPage.routeName);
+    } else {
+      navigateToLeaderboard(studentGroup: currentUser!.group!);
+    }
+  }
 }

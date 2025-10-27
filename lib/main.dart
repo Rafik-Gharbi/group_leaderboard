@@ -140,7 +140,7 @@ class ApprovalGuard extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     final user = MainController.find.currentUser;
-    if (Helper.isNullOrEmpty(user?.linkedGradeId) && !(user?.isAdmin ?? false)) {
+    if (Helper.isNullOrEmpty(user?.linkedGradeId)) {
       return RouteSettings(name: PendingApprovalPage.routeName);
     }
     return null;
