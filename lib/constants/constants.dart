@@ -6,9 +6,10 @@ import 'colors.dart';
 
 const String supabaseAnonKey =
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZvb2t1cHlpbmtpdnRqcnF6b3p3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1MzQ0MjcsImV4cCI6MjA3NjExMDQyN30.3P2AI6D_OQPXKp6hxqk5dHiKOz0t4pUk6u1UJDiFg8g";
-const String appsScriptSyncId =
-    'AKfycbwB-_nLXhh44QaVYP_Jq-mCAGNzp2knuPrEXGAeuoM3LmHV0Jo1A3Rr0RQSShDwPKjwhA';
-const String appsScriptSecretKey = '5QHR8InnFUzehNzVdylc59OdTRcGsYyz';
+const String googleSignInMacOSClientId =
+    '580076762827-c261kje6lpjp3lprip100cbdb398qhj6.apps.googleusercontent.com';
+const String googleSignInMacOSClientIdReversed =
+    'com.googleusercontent.apps.580076762827-c261kje6lpjp3lprip100cbdb398qhj6';
 const String adminEmail = 'rafik.gharbi.icloud@gmail.com';
 
 const String defaultPrefix = '+216';

@@ -16,7 +16,6 @@ class MainController extends GetxController {
   static MainController get find => Get.find<MainController>();
   final List<String> groups = ['All', 'G1', 'G2', 'G3', 'G4', 'G5', 'G6'];
   User? currentUser;
-  bool isAdmin = false;
   RxBool isLoading = true.obs;
 
   MainController() {
@@ -32,7 +31,8 @@ class MainController extends GetxController {
   }
 
   bool get isApproved =>
-      isAdmin || !Helper.isNullOrEmpty(currentUser?.linkedGradeId);
+      (currentUser?.isAdmin ?? false) ||
+      !Helper.isNullOrEmpty(currentUser?.linkedGradeId);
 
   Future<User?> fetchProfile({String? studentUID}) async {
     final firestore = FirebaseFirestore.instance;
@@ -73,7 +73,6 @@ class MainController extends GetxController {
           );
         }
       }
-      if (fetchedUser.email == adminEmail) isAdmin = true;
       if (studentUID == null) currentUser = fetchedUser;
       return fetchedUser;
     } catch (e) {
@@ -81,6 +80,7 @@ class MainController extends GetxController {
       debugPrint("Error fetching profile: $e");
       return fetchedUser;
     } finally {
+      isLoading.value = false;
       update();
     }
   }
@@ -119,7 +119,6 @@ class MainController extends GetxController {
 
   Future<void> logout() async {
     await firebase_auth.FirebaseAuth.instance.signOut();
-    isAdmin = false;
     currentUser = null;
     Get.offAllNamed(LoginPage.routeName);
   }

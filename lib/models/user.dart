@@ -1,3 +1,5 @@
+import '../constants/constants.dart';
+
 class User {
   final String? uid;
   final String? name;
@@ -28,4 +30,6 @@ class User {
 
   bool get isNotCompleted =>
       name == null || email == null || photo == null || group == null;
+
+  bool get isAdmin => email == adminEmail;
 }

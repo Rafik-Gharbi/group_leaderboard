@@ -44,14 +44,4 @@ class OverviewController extends GetxController {
   double roundUpToHundred(double number) {
     return ((number + 99) ~/ 100) * 100;
   }
-
-  String getInitials(String name) {
-    if (name.trim().isEmpty) return '';
-
-    final parts = name.trim().split(RegExp(r'\s+'));
-    if (parts.length == 1) return parts.first[0].toUpperCase();
-
-    // Take first letter of first and last parts
-    return (parts.first[0] + parts.last[0]).toUpperCase();
-  }
 }

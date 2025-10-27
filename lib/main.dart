@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primaryColor: Colors.blue,
           splashColor: Colors.white,
-          scaffoldBackgroundColor: Colors.white70,
+          scaffoldBackgroundColor: Colors.white,
           appBarTheme: AppBarTheme(
             backgroundColor: Colors.white70,
             surfaceTintColor: Colors.blue.shade200,
@@ -140,8 +140,7 @@ class ApprovalGuard extends GetMiddleware {
   @override
   RouteSettings? redirect(String? route) {
     final user = MainController.find.currentUser;
-    if (Helper.isNullOrEmpty(user?.linkedGradeId) &&
-        !MainController.find.isAdmin) {
+    if (Helper.isNullOrEmpty(user?.linkedGradeId) && !(user?.isAdmin ?? false)) {
       return RouteSettings(name: PendingApprovalPage.routeName);
     }
     return null;

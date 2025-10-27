@@ -31,7 +31,6 @@ class _SyncButtonState extends State<SyncButton> {
           'Authorization': 'Bearer $supabaseAnonKey',
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({'key': appsScriptSecretKey}),
       );
 
       if (response.statusCode == 200) {
