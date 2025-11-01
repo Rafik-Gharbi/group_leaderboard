@@ -7,10 +7,25 @@ import 'package:string_similarity/string_similarity.dart';
 
 class GradesMatchingController extends GetxController {
   final students = <Map<String, dynamic>>[].obs;
+  final filteredStudents = <Map<String, dynamic>>[].obs;
   final grades = <Map<String, dynamic>>[].obs;
   final matches = <Map<String, dynamic>>[].obs;
   final firestore = FirebaseFirestore.instance;
+  final searchStudentController = TextEditingController();
+  RxBool openFilter = false.obs;
   RxBool isLoading = true.obs;
+  String? _selectedGroup;
+
+  String? get selectedGroup => _selectedGroup;
+
+  set selectedGroup(String? value) {
+    if (value == "All") {
+      _selectedGroup = null;
+    } else {
+      _selectedGroup = value;
+    }
+    filterStudents();
+  }
 
   bool get hasStudentsWithoutGrades =>
       students.isNotEmpty &&
@@ -92,6 +107,7 @@ class GradesMatchingController extends GetxController {
     final snapshot = await firestore.collection('students').get();
     students.assignAll(snapshot.docs.map((e) => e.data()).toList());
     _sortLinkedStudent();
+    filteredStudents.assignAll(students);
   }
 
   void _sortLinkedStudent() {
@@ -154,5 +170,36 @@ class GradesMatchingController extends GetxController {
         actions: [TextButton(onPressed: Get.back, child: Text('OK'))],
       ),
     );
+  }
+
+  void filterStudents() {
+    if (searchStudentController.text.isEmpty && selectedGroup == null) {
+      filteredStudents.clear();
+      filteredStudents.assignAll(students);
+    } else {
+      filteredStudents.clear();
+      filteredStudents.assignAll(
+        students.where(
+          (element) =>
+              (selectedGroup != null
+                  ? element['group'] == selectedGroup
+                  : false) ||
+              (searchStudentController.text.isNotEmpty
+                  ? element['name'].toString().toLowerCase().contains(
+                      searchStudentController.text.toLowerCase(),
+                    )
+                  : false),
+        ),
+      );
+    }
+    update();
+  }
+
+  void toggleFilter() => openFilter.value = !openFilter.value;
+
+  void clearFilter() {
+    selectedGroup = null;
+    searchStudentController.clear();
+    update();
   }
 }

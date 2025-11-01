@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:group_leaderboard/constants/colors.dart';
+import 'package:group_leaderboard/controllers/main_controller.dart';
 import 'package:group_leaderboard/helpers/helper.dart';
 import 'package:group_leaderboard/services/theme/theme.dart';
 
@@ -41,13 +42,20 @@ class GradesMatchingPage extends StatelessWidget {
           child: Scaffold(
             appBar: AppBar(
               title: const Text("Grades Matching"),
-              actions: const [
+              actions: [
+                Padding(
+                  padding: EdgeInsets.all(8),
+                  child: IconButton(
+                    onPressed: controller.toggleFilter,
+                    icon: Icon(Icons.filter_alt_outlined),
+                  ),
+                ),
                 Padding(padding: EdgeInsets.all(8), child: SyncButton()),
               ],
             ),
             body: Obx(() {
-              final totalStudents = controller.students.length;
-              final totalLinked = controller.students
+              final totalStudents = controller.filteredStudents.length;
+              final totalLinked = controller.filteredStudents
                   .where(
                     (s) =>
                         s['linkedGradesId'] != null &&
@@ -64,6 +72,62 @@ class GradesMatchingPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   children: [
+                    AnimatedContainer(
+                      duration: Durations.medium1,
+                      height: controller.openFilter.value ? 82 : 0,
+                      child: Opacity(
+                        opacity: controller.openFilter.value ? 1 : 0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Expanded(
+                                child: TextFormField(
+                                  controller:
+                                      controller.searchStudentController,
+                                  decoration: InputDecoration(
+                                    label: Text("Search Student"),
+                                    border: OutlineInputBorder(),
+                                  ),
+                                  onChanged: (value) => Helper.onSearchDebounce(
+                                    controller.filterStudents,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              SizedBox(
+                                width: 120,
+                                child: DropdownButtonFormField(
+                                  initialValue:
+                                      controller.selectedGroup ?? 'All',
+                                  items: MainController.find.groups
+                                      .map(
+                                        (e) => DropdownMenuItem(
+                                          value: e,
+                                          child: Text(e),
+                                        ),
+                                      )
+                                      .toList(),
+                                  onChanged: (value) =>
+                                      controller.selectedGroup = value!,
+                                  dropdownColor: Colors.white,
+                                  decoration: const InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    labelText: "Group",
+                                  ),
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              IconButton(
+                                onPressed: controller.clearFilter,
+                                icon: Icon(Icons.clear_all_outlined),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Row(
@@ -89,12 +153,13 @@ class GradesMatchingPage extends StatelessWidget {
                     ),
 
                     Expanded(
-                      child: controller.students.isEmpty
+                      child: controller.filteredStudents.isEmpty
                           ? Center(child: Text('No signed up students yet!'))
                           : ListView.builder(
-                              itemCount: controller.students.length,
+                              itemCount: controller.filteredStudents.length,
                               itemBuilder: (context, index) {
-                                final student = controller.students[index];
+                                final student =
+                                    controller.filteredStudents[index];
                                 final match = controller.matches
                                     .cast()
                                     .singleWhere(
@@ -163,22 +228,24 @@ class GradesMatchingPage extends StatelessWidget {
                                               Helper.isNullOrEmpty(
                                                 student['linkedGradesId'],
                                               )
-                                              ? suggested.any(
-                                                  (e) =>
-                                                      e['target'] ==
-                                                      g['studentName'],
-                                                )
+                                              ? (suggested?.any(
+                                                      (e) =>
+                                                          e['target'] ==
+                                                          g['studentName'],
+                                                    ) ??
+                                                    false)
                                               : g['id'] ==
                                                     student['linkedGradesId'];
                                           final rating =
                                               Helper.isNullOrEmpty(
                                                 student['linkedGradesId'],
                                               )
-                                              ? suggested.any(
-                                                      (e) =>
-                                                          e['target'] ==
-                                                          g['studentName'],
-                                                    )
+                                              ? (suggested?.any(
+                                                          (e) =>
+                                                              e['target'] ==
+                                                              g['studentName'],
+                                                        ) ??
+                                                        false)
                                                     ? suggested.singleWhere(
                                                         (e) =>
                                                             e['target'] ==

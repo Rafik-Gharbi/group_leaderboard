@@ -15,11 +15,11 @@ class OverviewPage extends StatelessWidget {
     return GetBuilder<OverviewController>(
       init: OverviewController(),
       builder: (controller) => Obx(() {
-        if (controller.groupSumScore.isEmpty) {
+        if (controller.groupAvgScore.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final sortedGroups = controller.groupSumScore.entries.toList()
+        final sortedGroups = controller.groupAvgScore.entries.toList()
           ..sort((a, b) => b.value.compareTo(a.value));
 
         return SingleChildScrollView(
@@ -45,7 +45,7 @@ class OverviewPage extends StatelessWidget {
                       touchTooltipData: BarTouchTooltipData(
                         getTooltipItem: (group, groupIndex, rod, rodIndex) =>
                             BarTooltipItem(
-                              '${rod.toY.toStringAsFixed(0)} XP',
+                              '${rod.toY.toStringAsFixed(0)} AVG',
                               AppFonts.x14Regular.copyWith(color: Colors.white),
                             ),
                       ),
@@ -163,7 +163,7 @@ class OverviewPage extends StatelessWidget {
                   ),
                   _StatCard(
                     "🏅 Groups",
-                    controller.groupSumScore.length.toString(),
+                    controller.groupAvgScore.length.toString(),
                   ),
                   _StatCard(
                     "👨‍🎓 Students",

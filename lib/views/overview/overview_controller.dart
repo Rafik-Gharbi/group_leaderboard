@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OverviewController extends GetxController {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
-  final groupSumScore = <String, double>{}.obs;
+  final groupAvgScore = <String, double>{}.obs;
   final allStudents = [].obs;
   final totalXp = 0.0.obs;
 
@@ -28,12 +28,14 @@ class OverviewController extends GetxController {
     }
 
     // Compute averages
-    final sumScores = {
+    final avgScores = {
       for (var entry in groupScores.entries)
-        entry.key: entry.value.reduce((a, b) => a + b),
+        entry.key:
+            entry.value.reduce((a, b) => a + b) /
+            groupScores[entry.key]!.length,
     };
 
-    groupSumScore.assignAll(sumScores);
+    groupAvgScore.assignAll(avgScores);
     totalXp.value = total;
 
     // Top 3 students

@@ -67,6 +67,8 @@ class MainController extends GetxController {
           fetchedUser.grades = {
             'totalScore': grades['totalScore'],
             'assignments': grades['assignments'],
+            'extraXP': grades['extraXP'],
+            'practiceXP': grades['practiceXP'],
           };
           fetchedUser.grades?['assignments']?.sort(
             (a, b) => (a['index'] as int).compareTo((b['index'] as int)),

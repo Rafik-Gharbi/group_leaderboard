@@ -11,7 +11,12 @@ const Color kAccentColor = Colors.orange; // Colors.orange;
 const Color kErrorColor = Color(0xFFE21200);
 Color kErrorLightColor = Colors.red.shade600;
 const Color kRatingColor = Color(0xFFFDCC0D);
-const Color kNeutralColor = Color(0xFF231F20); // Colors.grey.shade700;
+const Color kNeutralColor = Color.fromARGB(
+  255,
+  97,
+  93,
+  94,
+); // Colors.grey.shade700;
 const Color kNeutralLightColor = Color(0xFFDDDDDD); // Colors.grey.shade200;
 Color kNeutralLightOpacityColor = kNeutralLightColor.withAlpha(180);
 Color kNeutralOpacityColor = kNeutralColor.withAlpha(180);

@@ -5,36 +5,41 @@ import 'package:group_leaderboard/controllers/main_controller.dart';
 import 'package:group_leaderboard/services/theme/theme.dart';
 import 'package:group_leaderboard/views/home/leaderboard_controller.dart';
 
+import '../../profile/components/build_grades_widget.dart';
+
 class BuildLeaderboard extends StatelessWidget {
   const BuildLeaderboard({super.key});
 
-  // void _showDetails(
-  //   BuildContext context,
-  //   String name,
-  //   Map<String, dynamic> assignments,
-  //   int total,
-  // ) {
-  //   showDialog(
-  //     context: context,
-  //     builder: (context) {
-  //       final assignmentRows = assignments.entries
-  //           .map((e) => '${e.key}: ${e.value}')
-  //           .join('\n');
-  //       return AlertDialog(
-  //         title: Text(name),
-  //         content: SingleChildScrollView(
-  //           child: Text('Total: $total\n\nAssignments:\n$assignmentRows'),
-  //         ),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () => Navigator.pop(context),
-  //             child: const Text('Close'),
-  //           ),
-  //         ],
-  //       );
-  //     },
-  //   );
-  // }
+  void _showDetails(String studentName, Map<String, dynamic> grades) {
+    Get.dialog(
+      AlertDialog(
+        backgroundColor: Colors.white,
+        title: Center(child: Text(studentName)),
+        content: SizedBox(
+          width: Get.width > 800 ? 800 : Get.width * 0.9,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Grades',
+                style: const TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+              if (grades.isEmpty)
+                const Text('No grades linked yet.')
+              else
+                BuildGradesWidget(grades: grades),
+            ],
+          ),
+        ),
+        actions: [TextButton(onPressed: Get.back, child: Text('OK'))],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,9 +69,6 @@ class BuildLeaderboard extends StatelessWidget {
             final group = data['group'] ?? '';
             final isCurrentUser =
                 MainController.find.currentUser?.linkedGradeId == doc.id;
-            // final assignments = Map<String, dynamic>.from(
-            //   data['assignments'] ?? {},
-            // );
 
             return ListTile(
               tileColor: isCurrentUser ? kPrimaryColor : null,
@@ -116,7 +118,9 @@ class BuildLeaderboard extends StatelessWidget {
                   ],
                 ),
               ),
-              // onTap: () => _showDetails(context, name, assignments, total),
+              onTap: isCurrentUser || MainController.find.currentUser!.isAdmin
+                  ? () => _showDetails(data['studentName'], data)
+                  : null,
             );
           },
         );

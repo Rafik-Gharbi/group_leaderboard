@@ -11,6 +11,8 @@ class BuildGradesWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final assignments = (grades['assignments'] as List?) ?? [];
     final totalScore = grades['totalScore'] ?? 0;
+    final practiceXP = grades['practiceXP'] ?? 0;
+    final extraXP = grades['extraXP'] ?? 0;
 
     final assignmentsScrollController = ScrollController();
     return Column(
@@ -153,6 +155,74 @@ class BuildGradesWidget extends StatelessWidget {
                     ),
                   ),
                 ),
+        ),
+
+        const SizedBox(height: 20),
+
+        Row(
+          children: [
+            Expanded(
+              child: Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                color: kNeutralColor,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 20,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Practice XP",
+                        style: AppFonts.x16Regular.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        "$practiceXP",
+                        style: AppFonts.x18Bold.copyWith(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 20),
+            Expanded(
+              child: Card(
+                elevation: 3,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                color: kNeutralColor,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 20,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Extra XP",
+                        style: AppFonts.x16Regular.copyWith(
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text(
+                        "$extraXP",
+                        style: AppFonts.x18Bold.copyWith(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );
