@@ -23,7 +23,10 @@ class GradesMatchingPage extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(title, style: AppFonts.x14Bold),
+              FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(title, style: AppFonts.x14Bold),
+              ),
               const SizedBox(height: 6),
               Text(value, style: AppFonts.x18Bold.copyWith(color: color)),
             ],

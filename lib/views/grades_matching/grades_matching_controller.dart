@@ -5,6 +5,8 @@ import 'package:group_leaderboard/helpers/helper.dart';
 import 'package:group_leaderboard/views/profile/profile_page.dart';
 import 'package:string_similarity/string_similarity.dart';
 
+import '../../constants/colors.dart';
+
 class GradesMatchingController extends GetxController {
   final students = <Map<String, dynamic>>[].obs;
   final filteredStudents = <Map<String, dynamic>>[].obs;
@@ -158,18 +160,59 @@ class GradesMatchingController extends GetxController {
   }
 
   void openProfile(Map<String, dynamic> student) {
-    Get.dialog(
-      AlertDialog(
-        backgroundColor: Colors.white,
-        title: Center(child: Text('${student['name']} Profile\'s')),
-        content: SizedBox(
-          width: Get.width > 800 ? 800 : Get.width * 0.9,
+    if (Helper.isMobile) {
+      Get.bottomSheet(
+        SizedBox(
           height: Get.height * 0.8,
-          child: ProfilePage(key: UniqueKey(), studentUID: student['uid']),
+          child: Material(
+            color: kNeutralColor100,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+            child: Column(
+              spacing: 10,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(width: 50),
+                      Text(
+                        '${student['name']} Profile\'s',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(onPressed: Get.back, icon: Icon(Icons.close)),
+                    ],
+                  ),
+                ),
+                Expanded(
+                  child: ProfilePage(
+                    key: UniqueKey(),
+                    studentUID: student['uid'],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
-        actions: [TextButton(onPressed: Get.back, child: Text('OK'))],
-      ),
-    );
+        isScrollControlled: true,
+      );
+    } else {
+      Get.dialog(
+        AlertDialog(
+          backgroundColor: Colors.white,
+          title: Center(child: Text('${student['name']} Profile\'s')),
+          content: SizedBox(
+            width: Get.width > 800 ? 800 : Get.width * 0.9,
+            height: Get.height * 0.8,
+            child: ProfilePage(key: UniqueKey(), studentUID: student['uid']),
+          ),
+          actions: [TextButton(onPressed: Get.back, child: Text('OK'))],
+        ),
+      );
+    }
   }
 
   void filterStudents() {

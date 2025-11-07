@@ -2,43 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:group_leaderboard/constants/colors.dart';
 import 'package:group_leaderboard/controllers/main_controller.dart';
+import 'package:group_leaderboard/helpers/helper.dart';
 import 'package:group_leaderboard/services/theme/theme.dart';
 import 'package:group_leaderboard/views/home/leaderboard_controller.dart';
 
-import '../../profile/components/build_grades_widget.dart';
+import 'build_grades_overlay.dart';
 
 class BuildLeaderboard extends StatelessWidget {
   const BuildLeaderboard({super.key});
 
   void _showDetails(String studentName, Map<String, dynamic> grades) {
-    Get.dialog(
-      AlertDialog(
-        backgroundColor: Colors.white,
-        title: Center(child: Text(studentName)),
-        content: SizedBox(
-          width: Get.width > 800 ? 800 : Get.width * 0.9,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Grades',
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16),
-              if (grades.isEmpty)
-                const Text('No grades linked yet.')
-              else
-                BuildGradesWidget(grades: grades),
-            ],
-          ),
-        ),
-        actions: [TextButton(onPressed: Get.back, child: Text('OK'))],
-      ),
-    );
+    if (Helper.isMobile) {
+      Get.bottomSheet(
+        BuildGradesOverlay(studentName: studentName, grades: grades),
+        isScrollControlled: true,
+      );
+    } else {
+      Get.dialog(BuildGradesOverlay(studentName: studentName, grades: grades));
+    }
   }
 
   @override
