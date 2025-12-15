@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:group_leaderboard/helpers/helper.dart';
 
 import '../../../constants/colors.dart';

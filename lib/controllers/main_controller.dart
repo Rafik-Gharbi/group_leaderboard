@@ -53,7 +53,7 @@ class MainController extends GetxController {
 
       // 2️⃣ Fetch signed picture URL from Supabase
       final picture = await _fetchSignedUrl(uid) ?? '';
-      fetchedUser = User.fromData(data, picture);
+      fetchedUser = User.fromData(data, picture: picture);
 
       // 3️⃣ Fetch linked grades if available
       final linkedGradesId = data['linkedGradesId'];

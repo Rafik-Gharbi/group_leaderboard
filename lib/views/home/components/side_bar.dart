@@ -8,6 +8,8 @@ import 'package:group_leaderboard/views/grades_matching/grades_matching_page.dar
 import 'package:group_leaderboard/views/home/leaderboard_controller.dart';
 import 'package:group_leaderboard/views/profile/profile_page.dart';
 
+import '../../project_evaluation/session_selection_page.dart';
+
 class SidebarController extends GetxController {
   RxBool isExpanded = false.obs;
 
@@ -66,13 +68,20 @@ class SideBar extends StatelessWidget {
                 ),
 
                 // Grades Matching (Admin)
-                if (MainController.find.currentUser!.isAdmin)
+                if (MainController.find.currentUser!.isAdmin) ...[
                   _DrawerItem(
                     icon: Icons.score_outlined,
                     label: 'Grades Matching',
                     expanded: controller.isExpanded.value,
                     onTap: () => Get.toNamed(GradesMatchingPage.routeName),
                   ),
+                  _DrawerItem(
+                    icon: Icons.assessment,
+                    label: 'Évaluation Projets',
+                    expanded: controller.isExpanded.value,
+                    onTap: () => Get.toNamed(SessionSelectionPage.routeName),
+                  ),
+                ],
 
                 // All groups overview
                 _DrawerItem(

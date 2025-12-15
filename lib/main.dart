@@ -19,6 +19,13 @@ import 'package:group_leaderboard/views/login/login_page.dart';
 import 'package:group_leaderboard/views/pending_approval/pending_approval_page.dart';
 import 'package:group_leaderboard/views/profile/profile_controller.dart';
 import 'package:group_leaderboard/views/profile/profile_page.dart';
+import 'package:group_leaderboard/views/project_evaluation/project_evaluation_page.dart';
+import 'package:group_leaderboard/views/project_evaluation/project_evaluation_controller.dart'
+    as local_eval;
+import 'package:group_leaderboard/views/project_evaluation/session_selection_page.dart';
+import 'package:group_leaderboard/views/project_evaluation/project_evaluation_page_firestore.dart';
+import 'package:group_leaderboard/views/project_evaluation/project_evaluation_controller_firestore.dart';
+import 'package:group_leaderboard/services/firestore_evaluation_service.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'firebase_options.dart';
 import 'helpers/helper.dart';
@@ -99,15 +106,46 @@ class MyApp extends StatelessWidget {
             middlewares: [AuthGuard(), ApprovalGuard()],
           ),
           GetPage(
-            name: GradesMatchingPage.routeName,
-            page: () => const GradesMatchingPage(),
-            binding: BindingsBuilder.put(() => GradesMatchingController()),
-            middlewares: [AuthGuard(), ApprovalGuard()],
-          ),
-          GetPage(
             name: PendingApprovalPage.routeName,
             page: () => const PendingApprovalPage(),
             middlewares: [AuthGuard()],
+          ),
+          GetPage(
+            name: GradesMatchingPage.routeName,
+            page: () => const GradesMatchingPage(),
+            binding: BindingsBuilder.put(() => GradesMatchingController()),
+            middlewares: [AuthGuard(), AdminGuard()],
+          ),
+          GetPage(
+            name: ProjectEvaluationPage.routeName,
+            page: () => const ProjectEvaluationPage(),
+            binding: BindingsBuilder.put(
+              () => local_eval.ProjectEvaluationController(),
+            ),
+            middlewares: [AuthGuard(), AdminGuard()],
+          ),
+          GetPage(
+            name: SessionSelectionPage.routeName,
+            page: () => const SessionSelectionPage(),
+            binding: BindingsBuilder(() {
+              Get.lazyPut(() => FirestoreEvaluationService());
+              Get.lazyPut(() => ProjectEvaluationControllerFirestore());
+            }),
+            middlewares: [AuthGuard(), AdminGuard()],
+          ),
+          GetPage(
+            name: ProjectEvaluationPageFirestore.routeName,
+            page: () => const ProjectEvaluationPageFirestore(),
+            binding: BindingsBuilder(() {
+              // Ensure dependencies are available
+              if (!Get.isRegistered<FirestoreEvaluationService>()) {
+                Get.lazyPut(() => FirestoreEvaluationService());
+              }
+              if (!Get.isRegistered<ProjectEvaluationControllerFirestore>()) {
+                Get.lazyPut(() => ProjectEvaluationControllerFirestore());
+              }
+            }),
+            middlewares: [AuthGuard(), AdminGuard()],
           ),
         ],
       ),
@@ -142,6 +180,21 @@ class ApprovalGuard extends GetMiddleware {
     final user = MainController.find.currentUser;
     if (Helper.isNullOrEmpty(user?.linkedGradeId)) {
       return RouteSettings(name: PendingApprovalPage.routeName);
+    }
+    return null;
+  }
+}
+
+class AdminGuard extends GetMiddleware {
+  @override
+  RouteSettings? redirect(String? route) {
+    final user = MainController.find.currentUser;
+    if (!(user?.isAdmin ?? false)) {
+      Helper.snackBar(
+        title: 'Accès refusé',
+        message: 'Seuls les administrateurs peuvent accéder à cette page',
+      );
+      return RouteSettings(name: LeaderboardPage.routeName);
     }
     return null;
   }

@@ -21,9 +21,9 @@ class User {
     this.grades,
   });
 
-  factory User.fromData(Map<String, dynamic> data, String picture) => User(
-    uid: data['uid'],
-    name: data['name'],
+  factory User.fromData(Map<String, dynamic> data, {String? picture, String? uid}) => User(
+    uid: uid ?? data['uid'],
+    name: data['name'] ?? data['studentName'],
     email: data['email'],
     photo: picture,
     group: data['group'],

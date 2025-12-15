@@ -165,7 +165,7 @@ class GradesMatchingPage extends StatelessWidget {
                                     controller.filteredStudents[index];
                                 final match = controller.matches
                                     .cast()
-                                    .singleWhere(
+                                    .firstWhere(
                                       (element) =>
                                           element['student']['name'] ==
                                           student['name'],
